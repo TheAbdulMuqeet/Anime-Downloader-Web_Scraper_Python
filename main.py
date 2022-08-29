@@ -8,6 +8,7 @@ endingEpisodeNumber = 0
 episodesToDownload = []
 names_of_episodesToDownload = []
 episodes_not_downloaded = []
+episodes_downloaded = []
 episodes = []
 count = 0
 totalEpisodes = 0
@@ -167,7 +168,7 @@ while dl_wait:
         if fname.endswith('.crdownload'):
             dl_wait = True
 driver.close()
-
+os.system("cls")
 print("\n==============")
 print("Final result")
 print("=============")
@@ -181,12 +182,20 @@ for episode_name in names_of_episodesToDownload:
     if(tempFound):
         episodes_not_downloaded.append(episode_name)
         all_downloaded += 1
+    else:
+        episodes_downloaded.append(episode_name)
 if all_downloaded == 0:
-    print("No errors were encountered")
+    print("No errors were encountered.")
+
 elif not _404 == 0:
     print("No episodes were found on website's server")
 else:
-    print("Re-download the listed episodes")
+    print("\nRe-download the listed episodes")
+    print("-------------------------------")
+    for episode_name in episodes_not_downloaded:
+        print(f"{episode_name} failed to download")
 
-for episode_name in episodes_not_downloaded:
-    print(f"{episode_name} failed to download")
+print("\nFollowing episodes were succesfully downloaded")
+print("----------------------------------------------")
+for episode_name in episodes_downloaded:
+    print(episode_name)
