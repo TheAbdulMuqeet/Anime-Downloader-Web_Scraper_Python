@@ -159,6 +159,8 @@ for episode in episodes:
 
 print("\nPlease wait, downloading is in progress...")
 print("Check the browser for download information")
+print("Do not close any tab or the browser")
+
 dl_wait = True
 while dl_wait:
     dl_wait = False
