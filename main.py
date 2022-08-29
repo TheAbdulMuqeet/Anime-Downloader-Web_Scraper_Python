@@ -13,19 +13,28 @@ totalEpisodes = 0
 choice = 0
 tempBool = 0
 all_downloaded = 0
+browser = 0
+_404 = 0
+
+# Selection of the browser
+while (browser < 1 or browser > 2):
+    os.system("cls")
+    print("Select the browser")
+    browser = int(input("""
+        1. Chrome browser
+        2. Microsoft Edge
+        Selection: """))
 
 # Selecting download method
 while (not choice >= 1 or not choice <= 3):
-    os.system("cls")
     if (tempBool > 0):
         print("==> Please enter the right options")
-    print("""
-    Choose download method:
+    print("\nChoose download method:")
+    choice = int(input("""
         1. All episodes
         2. Range of episodes
         3. Some episodes
-        Selection: """, end="")
-    choice = int(input(""))
+        Selection: """))
     tempBool += 1
 
 print("\nEnter data required to start the download")
@@ -58,12 +67,19 @@ print("===================================================")
 print("The browser is now starting...")
 
 # Adding arguments
-options = webdriver.EdgeOptions()
+if browser == 2:
+    options = webdriver.EdgeOptions()
+else:
+    options = webdriver.ChromeOptions()
+
 options.add_argument('--log-level=3')
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
 # Opening the browser
-driver = webdriver.Edge(options=options)
+if browser == 2:
+    driver = webdriver.Edge(options=options)
+else:
+    driver = webdriver.Chrome(options=options)
 driver.set_window_position(0, 0, windowHandle='current')
 driver.get(mainLink)
 elements = driver.find_elements(By.XPATH, '//h3/a')
@@ -93,6 +109,11 @@ for episode in episodes:
         currentEpisodeNumber = startingEpisodeNumber
         if (count >= startingEpisodeNumber and count <= endingEpisodeNumber):
             driver.get(episode)
+            if (driver.find_element(By.TAG_NAME, 'h3').text == "404! Page Not Found"):
+                print(
+                    f"Error: Episode {count} cannot be downloaded because it has been removed from the server")
+                _404 += 1
+                continue
             direct_mirror = driver.find_element(
                 By.CLASS_NAME, 'btn-outline-success')
             driver.get(direct_mirror.get_attribute('href'))
@@ -103,15 +124,18 @@ for episode in episodes:
             download_direct = driver.find_element(By.CLASS_NAME, 'btn-success')
             driver.get(download_direct.get_attribute('href'))
 
-            names_of_episodesToDownload.append(driver.find_element(By.CLASS_NAME, 'card-header').text)
+            names_of_episodesToDownload.append(
+                driver.find_element(By.CLASS_NAME, 'card-header').text)
             download_now = driver.find_element(By.NAME, 'download')
-            download_now.click()
             print(f"Episode {currentEpisodeNumber} is downloading.")
+            download_now.click()
+            currentEpisodeNumber += 1
 
     elif choice == 3:
         for i in episodesToDownload:
             if (count == i):
                 if count <= totalEpisodes:
+                    currentEpisodeNumber = i
                     driver.get(episode)
                     direct_mirror = driver.find_element(
                         By.CLASS_NAME, 'btn-outline-success')
@@ -124,14 +148,17 @@ for episode in episodes:
                         By.CLASS_NAME, 'btn-success')
                     driver.get(download_direct.get_attribute('href'))
 
+                    names_of_episodesToDownload.append(
+                        driver.find_element(By.CLASS_NAME, 'card-header').text)
                     download_now = driver.find_element(By.NAME, 'download')
+                    print(f"Episode {currentEpisodeNumber} is downloading.")
                     download_now.click()
-                    print(f"Episode {episodesToDownload[i]} is downloading.")
 
                 else:
-                    print("Episode ", episodesToDownload[i], " not found")
+                    print("Episode ", i , " not found")
 
-
+print("\nPlease wait, downloading is in progress...")
+print("Check the browser for download information")
 dl_wait = True
 while dl_wait:
     dl_wait = False
@@ -151,8 +178,9 @@ for fname in os.listdir(download_directory):
             print(f"{episode_name} failed to download")
             all_downloaded += 1
 
-print("")
 if all_downloaded == 0:
     print("No errors were encountered")
+elif not _404 == 0:
+    print("No episodes were found on website's server")
 else:
     print("Re-download the listed episodes")
