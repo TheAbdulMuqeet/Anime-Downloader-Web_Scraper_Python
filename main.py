@@ -6,7 +6,7 @@ startingEpisodeNumber = 0
 episodeDownloadable = 0
 endingEpisodeNumber = 0
 episodesToDownload = []
-names_of_episodesToDownload = ["01. The Scales of Justice 299300.mkv", "02. The Scales of Justice 299301"]
+names_of_episodesToDownload = []
 episodes_not_downloaded = []
 episodes = []
 count = 0
@@ -82,10 +82,10 @@ else:
     driver = webdriver.Chrome(options=options)
 driver.set_window_position(0, 0, windowHandle='current')
 driver.get(mainLink)
+print("Please wait! Counting the episodes...")
 elements = driver.find_elements(By.XPATH, '//h3/a')
 
 # counting total episodes
-print("Please wait! Counting the episodes...")
 for element in elements:
     episodes.append(element.get_attribute('href'))
     totalEpisodes += 1
@@ -103,10 +103,10 @@ print("===================================================")
 print("Downloads are now started")
 print("==> \tPrompt: if any episode fails to download, re-download it")
 count = 0
+currentEpisodeNumber = startingEpisodeNumber
 for episode in episodes:
     count += 1
     if choice == 1 or choice == 2:
-        currentEpisodeNumber = startingEpisodeNumber
         if (count >= startingEpisodeNumber and count <= endingEpisodeNumber):
             driver.get(episode)
             if (driver.find_element(By.TAG_NAME, 'h3').text == "404! Page Not Found"):
@@ -173,12 +173,11 @@ print("Final result")
 print("=============")
 for episode_name in names_of_episodesToDownload:
     for fname in os.listdir(download_directory):
-        if fname.startswith(episode_name):
+        if fname == episode_name:
             tempFound = 0
             break
         else:
             tempFound = 1
-            break
     if(tempFound):
         episodes_not_downloaded.append(episode_name)
         all_downloaded += 1
