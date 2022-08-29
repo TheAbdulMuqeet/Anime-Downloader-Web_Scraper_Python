@@ -1,8 +1,7 @@
 ***!!! Important !!!***
 1.    Download the latest driver for your browser, if not, download the driver version similar to your web browser or the script won't work.
-2.    Keep the driver executable file in the same directory of main.py
-3.    You can find your browser version in about settings of your browser.
-4.    This script only works with microsoft edge or chrome
-
-python v3 or later
-pip install selenium
+2.    You can find your browser version in about settings of your browser.
+3.    Keep the driver executable file in the same directory of main.py.
+4.    This script only works with microsoft edge or chrome.
+5.    Python v3 or later installed on your machine.
+6.    pip install selenium.
