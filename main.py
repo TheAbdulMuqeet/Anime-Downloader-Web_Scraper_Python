@@ -6,7 +6,8 @@ startingEpisodeNumber = 0
 episodeDownloadable = 0
 endingEpisodeNumber = 0
 episodesToDownload = []
-names_of_episodesToDownload = []
+names_of_episodesToDownload = ["01. The Scales of Justice 299300.mkv", "02. The Scales of Justice 299301"]
+episodes_not_downloaded = []
 episodes = []
 count = 0
 totalEpisodes = 0
@@ -43,8 +44,7 @@ print("------------------------------------------", end="\n")
 
 mainLink = input("Enter archive link: ")
 # download_directory = input("Enter download directory (the download directory your browser have): ")
-download_directory = os.path.join(
-    os.path.expandvars("%userprofile%"), "Downloads")
+download_directory = os.path.join(os.path.expandvars("%userprofile%"), "Downloads")
 
 
 if choice == 2:
@@ -160,7 +160,6 @@ for episode in episodes:
 print("\nPlease wait, downloading is in progress...")
 print("Check the browser for download information")
 print("Do not close any tab or the browser")
-
 dl_wait = True
 while dl_wait:
     dl_wait = False
@@ -169,20 +168,26 @@ while dl_wait:
             dl_wait = True
 driver.close()
 
-print("\n=============")
+print("\n==============")
 print("Final result")
-print("============")
-for fname in os.listdir(download_directory):
-    for episode_name in names_of_episodesToDownload:
+print("=============")
+for episode_name in names_of_episodesToDownload:
+    for fname in os.listdir(download_directory):
         if fname.startswith(episode_name):
-            continue
+            tempFound = 0
+            break
         else:
-            print(f"{episode_name} failed to download")
-            all_downloaded += 1
-
+            tempFound = 1
+            break
+    if(tempFound):
+        episodes_not_downloaded.append(episode_name)
+        all_downloaded += 1
 if all_downloaded == 0:
     print("No errors were encountered")
 elif not _404 == 0:
     print("No episodes were found on website's server")
 else:
     print("Re-download the listed episodes")
+
+for episode_name in episodes_not_downloaded:
+    print(f"{episode_name} failed to download")
