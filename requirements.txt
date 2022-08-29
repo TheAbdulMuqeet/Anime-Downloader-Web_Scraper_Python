@@ -1,2 +1,6 @@
+***!!! Important !!!***
+Download the latest driver for your browser, if not, download the driver version similar to your web browser or the script won't work.
+You can find your browser version in about settings of your browser
+
 python v3 or later
 pip install selenium
