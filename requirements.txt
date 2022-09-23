@@ -1,5 +1,5 @@
 ***!!! Important !!!***
-1.    Download the latest driver for your browser, if not, download the driver version similar to your web browser or the script won't work.
+1.    Download the driver for your browser (type driver for chrome or driver for edge). The version must be similar to your web browser's version or the script won't work.
 2.    You can find your browser version in about settings of your browser.
 3.    Keep the driver executable file in the same directory of main.py.
 4.    This script only works with microsoft edge or chrome.
