@@ -224,16 +224,16 @@ def main_engine():
         os.system("cls")
         browser = which_browser()
         resume = are_there_links();
+        required_episodes = which_episodes(choice)
+        downloaded_episodes = []
 
         try:
-            downloaded_episodes = []
             if resume == 0:
                 choice = which_method()
                 print("\nEnter data required to start the download")
                 print("------------------------------------------", end="\n")                
 
                 # downloading episodes
-                required_episodes = which_episodes(choice)
                 downloaded_episodes = driver_process(browser, required_episodes, choice)
             else:
                 downloaded_episodes = driver_process(browser, [0, 0], 0, resume_links=resume)
@@ -250,6 +250,9 @@ def main_engine():
             
             # After Download
             remaining_episode_links = []
+            if not(resume == 0):
+                required_episodes = downloaded_episodes
+
             for i in range(len(required_episodes)):
                 if downloaded_episodes[i] in os.listdir(download_directory):
                     print(f" OO ==> Episode {required_episodes[i]} successfully downloaded")
