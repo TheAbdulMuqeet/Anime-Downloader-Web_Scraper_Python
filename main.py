@@ -224,14 +224,15 @@ def main_engine():
         os.system("cls")
         browser = which_browser()
         resume = are_there_links();
-        required_episodes = which_episodes(choice)
         downloaded_episodes = []
+        required_episodes = []
 
         try:
             if resume == 0:
                 choice = which_method()
                 print("\nEnter data required to start the download")
                 print("------------------------------------------", end="\n")                
+                required_episodes = which_episodes(choice)
 
                 # downloading episodes
                 downloaded_episodes = driver_process(browser, required_episodes, choice)
