@@ -3,6 +3,9 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 download_directory = os.path.join(os.path.expandvars("%userprofile%"), "Downloads")
 link_file = "resume_download.txt"
 
@@ -28,7 +31,7 @@ def which_browser():
 def which_method():
     # Selecting download method
     choice = 0
-    print()
+    #print()
     while (True):
         try:
             print("Choose download method:")
@@ -130,7 +133,7 @@ def driver_process(browser_choice, required_episodes_numbers, method, resume_lin
     if browser_choice == 2:
         driver = webdriver.Edge(options=options)
     else:
-        driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.set_window_position(0, 0, windowHandle='current')
     driver.get(mainLink)
     
@@ -223,7 +226,7 @@ def main_engine():
     try:
         os.system("cls")
         browser = which_browser()
-        resume = are_there_links();
+        resume = are_there_links()
         downloaded_episodes = []
         required_episodes = []
 
